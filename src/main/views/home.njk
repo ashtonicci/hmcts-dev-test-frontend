@@ -1,121 +1,66 @@
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
 {% extends "template.njk" %}
 
-<!-- You may want to make further use of these components: https://design-system.service.gov.uk/components/
-but ultimately it is up to you -->
-
 {% block content %}
-  <h1 class="govuk-heading-xl">Welcome to your dev test!</h1>
+  <div id="tasks-spa" class="hmcts-task-spa" data-api-base="/api/tasks">
+    <h1 class="govuk-heading-xl">Task Manager</h1>
 
-  <!-- The freedom is yours. You can design the solution however you like, however there is a starting point provided
-  to ensure you have both services running. You may want to make use of the Gov UK Components:
-  https://design-system.service.gov.uk/components/ to add tabs and so forth :) -->
+    <p class="govuk-body">Create, update and delete tasks without page reloads.</p>
 
-  {% if example.id %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-inset-text hmcts-task-spa__message" hidden data-message></div>
+      </div>
+    </div>
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: "ID"
-          },
-          value: {
-            text: example.id
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case id ?!"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Case Number"
-          },
-          value: {
-            text: example.caseNumber
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case number"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Title"
-          },
-          value: {
-            html: example.title
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case title"
-              }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Description"
-          },
-          value: {
-            html: example.description
-          },
-          actions: {
-            items: [
-               {
-                 href: "#",
-                 text: "Delete",
-                 visuallyHiddenText: "Delete description"
-               },
-               {
-                 href: "#",
-                 text: "Change",
-                 visuallyHiddenText: "Change description"
-               }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Status"
-          },
-          value: {
-            html: example.status
-          },
-          actions: {
-            items: [
-            ]
-          }
-        },
-        {
-          key: {
-           text: "Created Date"
-          },
-          value: {
-           html: example.createdDate
-          },
-          actions: {
-           items: [
-           ]
-          }
-        }
-      ]
-    }) }}
+    <section class="hmcts-task-spa__panel">
+      <h2 class="govuk-heading-m">Create Task</h2>
+      <form class="hmcts-task-spa__form" data-create-form>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="task-title">Title</label>
+          <input class="govuk-input" id="task-title" name="title" type="text" required maxlength="255" />
+        </div>
 
-  {% endif %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="task-description">Description</label>
+          <textarea class="govuk-textarea" id="task-description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="task-due-date">Due date and time</label>
+          <input class="govuk-input" id="task-due-date" name="dueDate" type="datetime-local" required />
+        </div>
+
+        <button class="govuk-button" data-module="govuk-button" type="submit">Create task</button>
+      </form>
+    </section>
+
+    <section class="hmcts-task-spa__panel">
+      <div class="hmcts-task-spa__table-header">
+        <h2 class="govuk-heading-m">Tasks</h2>
+        <button class="govuk-button govuk-button--secondary hmcts-task-spa__refresh" data-module="govuk-button" data-refresh type="button">Refresh</button>
+      </div>
+
+      <div class="govuk-table-responsive">
+        <table class="govuk-table" data-task-table>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Title</th>
+              <th class="govuk-table__header" scope="col">Description</th>
+              <th class="govuk-table__header" scope="col">Due</th>
+              <th class="govuk-table__header" scope="col">Status</th>
+              <th class="govuk-table__header" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body" data-task-table-body>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" colspan="5">Loading tasks...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="govuk-body-s hmcts-task-spa__meta" data-task-meta></p>
+    </section>
+  </div>
 
 {% endblock %}
